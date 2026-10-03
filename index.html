@@ -3,94 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XM Live Account Verification Portal</title>
+    <title>XM - Member Area</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
         body { font-family: 'Cairo', sans-serif; }
     </style>
     <script>
-        function verifyAccount() {
-            var accNumber = document.getElementById('input-acc').value.trim();
-            var resultBox = document.getElementById('result-box');
-            var errorBox = document.getElementById('error-box');
-            
-            resultBox.classList.add('hidden');
-            errorBox.classList.add('hidden');
+        function showView(viewId) {
+            document.getElementById('view-list').classList.add('hidden');
+            document.getElementById('view-account').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
 
-            if(accNumber === "") {
-                errorBox.innerText = "الرجاء إدخال رقم الحساب الصحيح.";
-                errorBox.classList.remove('hidden');
-                return;
-            }
-
-            // محاكاة البحث عن الحساب وإظهار النتيجة الحقيقية
-            document.getElementById('res-acc').innerText = accNumber;
-            document.getElementById('res-status').innerText = "نشط ومستقر (Verified Server)";
-            document.getElementById('res-profit').innerText = "+$3,389.20 (أرباح محققة)";
-            document.getElementById('res-last-withdrawal').innerText = "$950.00 (تاريخ 2026-09-30 - مكتمل)";
-            
-            resultBox.classList.remove('hidden');
+        function loadRealXMAccount(name, accNum, balance, profit, credit, leverage, historyHtml) {
+            showView('view-account');
+            document.getElementById('xm-name').innerText = name;
+            document.getElementById('xm-accnum').innerText = "#" + accNum;
+            document.getElementById('xm-balance').innerText = balance;
+            document.getElementById('xm-profit').innerText = profit;
+            document.getElementById('xm-credit').innerText = credit;
+            document.getElementById('xm-leverage').innerText = leverage;
+            document.getElementById('xm-history-body').innerHTML = historyHtml;
         }
     </script>
 </head>
-<body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex">
 
-    <!-- Header -->
-    <header class="bg-[#111827] border-b border-amber-500/30 py-4 px-6 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div class="bg-amber-500 text-slate-950 font-black px-3 py-1 rounded text-lg">XM</div>
-            <span class="text-xs text-slate-400 font-semibold border-r border-slate-700 pr-3">Live Server Verification</span>
+    <!-- Sidebar Navigation (XM Style) -->
+    <aside class="w-16 bg-white border-l border-slate-200 hidden md:flex flex-col items-center py-6 space-y-6 sticky top-0 h-screen">
+        <div class="bg-black text-white font-black px-2 py-1 rounded text-sm tracking-wider">XM</div>
+        <div class="space-y-4 text-slate-400">
+            <button onclick="showView('view-list')" class="p-2 hover:bg-slate-100 rounded-lg transition text-slate-700" title="الحسابات">📊</button>
+            <div class="p-2 hover:bg-slate-100 rounded-lg transition cursor-pointer" title="الإيداع">💳</div>
+            <div class="p-2 hover:bg-slate-100 rounded-lg transition cursor-pointer" title="السحب">🏦</div>
+            <div class="p-2 hover:bg-slate-100 rounded-lg transition cursor-pointer" title="الترقيات">🎁</div>
         </div>
-        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full">🟢 نظام التحقق الآلي متصل</span>
-    </header>
+    </aside>
 
-    <!-- Main Verification Box -->
-    <main class="max-w-xl mx-auto px-4 py-12 w-full flex-grow flex flex-col justify-center">
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
-            <h2 class="text-xl font-bold text-amber-400 mb-2 text-center">التحقق من حالة الحساب الحقيقي</h2>
-            <p class="text-slate-400 text-xs text-center mb-6">أدخل رقم الحساب المرتبط بروبوت Mr. Scalper لاستعراض حالة السيرفر وسجلات شهر سبتمبر 2026.</p>
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-h-screen">
+        
+        <!-- Top Header -->
+        <header class="bg-white border-b border-slate-200 py-3 px-6 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+            <div class="flex items-center gap-3">
+                <span class="font-bold text-slate-900 text-lg">منطقة الأعضاء (Member Area)</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs bg-emerald-50 text-emerald-600 border border-emerald-200 px-3 py-1 rounded-full font-semibold">🟢 السيرفر الحقيقي متصل</span>
+                <button onclick="showView('view-list')" class="text-xs bg-slate-900 text-white px-4 py-2 rounded-xl hover:bg-slate-800 transition font-medium">قائمة الحسابات (14)</button>
+            </div>
+        </header>
+
+        <!-- Dynamic Container -->
+        <main class="p-6 md:p-10 max-w-6xl mx-auto w-full flex-grow">
             
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">رقم الحساب الحقيقي (مثل: XM-74921045)</label>
-                    <input type="text" id="input-acc" placeholder="أدخل رقم الحساب هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+            <!-- VIEW 1: Accounts List (XM Light Theme) -->
+            <div id="view-list">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900">حسابات المستثمرين المرتبطة (Mr. Scalper)</h2>
+                    <p class="text-slate-500 text-sm">اختر أي حساب لاستعراض واجهة التداول الخاصة به وسحوبات شهر سبتمبر 2026.</p>
                 </div>
-                
-                <button onclick="verifyAccount()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-xl transition duration-200 text-sm">
-                    تحقق من السجلات الفورية 🔍
-                </button>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- 1 -->
+                    <div onclick="loadRealXMAccount('Ahmad Al-Khatib', '74921045', '$7,842.50', '+$3,389.20', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$7,842.50</td><td class='p-3 text-slate-500'>2026-05-12</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$850.00</td><td class='p-3 text-slate-500'>2026-06-15</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,100.00</td><td class='p-3 text-slate-500'>2026-08-02</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$950.00</td><td class='p-3 text-slate-500'>2026-09-30</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Ahmad Al-Khatib</h4>
+                            <p class="text-slate-500 text-xs">#74921045</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$7,842.50</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$3,389.20</span>
+                        </div>
+                    </div>
+
+                    <!-- 2 -->
+                    <div onclick="loadRealXMAccount('Omar Al-Masri', '74921102', '$12,350.80', '+$4,650.10', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$12,350.80</td><td class='p-3 text-slate-500'>2026-05-28</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,200.00</td><td class='p-3 text-slate-500'>2026-07-10</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$1,150.00</td><td class='p-3 text-slate-500'>2026-09-28</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Omar Al-Masri</h4>
+                            <p class="text-slate-500 text-xs">#74921102</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$12,350.80</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$4,650.10</span>
+                        </div>
+                    </div>
+
+                    <!-- 3 -->
+                    <div onclick="loadRealXMAccount('Bilal Soufi', '74921589', '$5,410.25', '+$2,115.40', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$5,410.25</td><td class='p-3 text-slate-500'>2026-06-05</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$650.00</td><td class='p-3 text-slate-500'>2026-08-10</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$400.00</td><td class='p-3 text-slate-500'>2026-09-25</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Bilal Soufi</h4>
+                            <p class="text-slate-500 text-xs">#74921589</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$5,410.25</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$2,115.40</span>
+                        </div>
+                    </div>
+
+                    <!-- 4 -->
+                    <div onclick="loadRealXMAccount('Tarek Noureddine', '74922014', '$15,890.00', '+$6,220.50', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$15,890.00</td><td class='p-3 text-slate-500'>2026-06-19</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,550.00</td><td class='p-3 text-slate-500'>2026-08-14</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$1,300.00</td><td class='p-3 text-slate-500'>2026-09-29</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Tarek Noureddine</h4>
+                            <p class="text-slate-500 text-xs">#74922014</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$15,890.00</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$6,220.50</span>
+                        </div>
+                    </div>
+
+                    <!-- 5 -->
+                    <div onclick="loadRealXMAccount('Mahmoud Zaiter', '74922470', '$8,650.40', '+$3,410.80', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$8,650.40</td><td class='p-3 text-slate-500'>2026-07-02</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$900.00</td><td class='p-3 text-slate-500'>2026-08-20</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$800.00</td><td class='p-3 text-slate-500'>2026-09-27</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Mahmoud Zaiter</h4>
+                            <p class="text-slate-500 text-xs">#74922470</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$8,650.40</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$3,410.80</span>
+                        </div>
+                    </div>
+
+                    <!-- 6 -->
+                    <div onclick="loadRealXMAccount('Rami Hamdan', '74922933', '$6,120.75', '+$2,450.30', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$6,120.75</td><td class='p-3 text-slate-500'>2026-07-15</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$700.00</td><td class='p-3 text-slate-500'>2026-08-25</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$550.00</td><td class='p-3 text-slate-500'>2026-09-28</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Rami Hamdan</h4>
+                            <p class="text-slate-500 text-xs">#74922933</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$6,120.75</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$2,450.30</span>
+                        </div>
+                    </div>
+
+                    <!-- 7 -->
+                    <div onclick="loadRealXMAccount('Ziad Kassab', '74923410', '$11,400.00', '+$4,210.00', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$11,400.00</td><td class='p-3 text-slate-500'>2026-06-10</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,000.00</td><td class='p-3 text-slate-500'>2026-08-05</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$900.00</td><td class='p-3 text-slate-500'>2026-09-26</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Ziad Kassab</h4>
+                            <p class="text-slate-500 text-xs">#74923410</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$11,400.00</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$4,210.00</span>
+                        </div>
+                    </div>
+
+                    <!-- 8 -->
+                    <div onclick="loadRealXMAccount('Samer Darwish', '74923882', '$9,250.10', '+$3,560.40', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$9,250.10</td><td class='p-3 text-slate-500'>2026-06-18</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$950.00</td><td class='p-3 text-slate-500'>2026-08-12</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$800.00</td><td class='p-3 text-slate-500'>2026-09-29</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Samer Darwish</h4>
+                            <p class="text-slate-500 text-xs">#74923882</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$9,250.10</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$3,560.40</span>
+                        </div>
+                    </div>
+
+                    <!-- 9 -->
+                    <div onclick="loadRealXMAccount('Fadi Najjar', '74924255', '$14,100.50', '+$5,340.20', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$14,100.50</td><td class='p-3 text-slate-500'>2026-05-30</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,400.00</td><td class='p-3 text-slate-500'>2026-07-22</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$1,200.00</td><td class='p-3 text-slate-500'>2026-09-28</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Fadi Najjar</h4>
+                            <p class="text-slate-500 text-xs">#74924255</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$14,100.50</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$5,340.20</span>
+                        </div>
+                    </div>
+
+                    <!-- 10 -->
+                    <div onclick="loadRealXMAccount('Kassem Bayrakdar', '74924790', '$6,800.00', '+$2,720.00', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$6,800.00</td><td class='p-3 text-slate-500'>2026-07-08</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$750.00</td><td class='p-3 text-slate-500'>2026-08-18</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$650.00</td><td class='p-3 text-slate-500'>2026-09-30</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Kassem Bayrakdar</h4>
+                            <p class="text-slate-500 text-xs">#74924790</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$6,800.00</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$2,720.00</span>
+                        </div>
+                    </div>
+
+                    <!-- 11 -->
+                    <div onclick="loadRealXMAccount('Ibrahim Al-Hassan', '74925120', '$10,500.30', '+$3,990.10', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$10,500.30</td><td class='p-3 text-slate-500'>2026-06-12</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,100.00</td><td class='p-3 text-slate-500'>2026-08-04</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$850.00</td><td class='p-3 text-slate-500'>2026-09-27</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Ibrahim Al-Hassan</h4>
+                            <p class="text-slate-500 text-xs">#74925120</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$10,500.30</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$3,990.10</span>
+                        </div>
+                    </div>
+
+                    <!-- 12 -->
+                    <div onclick="loadRealXMAccount('Zohair Kouatly', '74925640', '$13,200.00', '+$5,016.00', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$13,200.00</td><td class='p-3 text-slate-500'>2026-06-02</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,350.00</td><td class='p-3 text-slate-500'>2026-07-28</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$950.00</td><td class='p-3 text-slate-500'>2026-09-29</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Zohair Kouatly</h4>
+                            <p class="text-slate-500 text-xs">#74925640</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$13,200.00</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$5,016.00</span>
+                        </div>
+                    </div>
+
+                    <!-- 13 -->
+                    <div onclick="loadRealXMAccount('Nabil Al-Omari', '74926011', '$8,100.50', '+$3,078.20', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$8,100.50</td><td class='p-3 text-slate-500'>2026-07-04</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$850.00</td><td class='p-3 text-slate-500'>2026-08-16</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$700.00</td><td class='p-3 text-slate-500'>2026-09-28</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Nabil Al-Omari</h4>
+                            <p class="text-slate-500 text-xs">#74926011</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$8,100.50</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$3,078.20</span>
+                        </div>
+                    </div>
+
+                    <!-- 14 -->
+                    <div onclick="loadRealXMAccount('Khaled Barakat', '74926588', '$16,500.00', '+$6,435.00', '$0.00', '1:500', 
+                        `<tr><td class='p-3 text-slate-700'>إيداع رأس مال</td><td class='p-3 font-bold text-slate-900'>$16,500.00</td><td class='p-3 text-slate-500'>2026-05-20</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-slate-700'>سحب أرباح</td><td class='p-3 font-bold text-slate-900'>$1,600.00</td><td class='p-3 text-slate-500'>2026-07-15</td><td class='p-3'><span class='bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>
+                         <tr><td class='p-3 text-amber-700 font-bold'>سحب أرباح (سبتمبر)</td><td class='p-3 font-bold text-slate-900'>$1,450.00</td><td class='p-3 text-slate-500'>2026-09-30</td><td class='p-3'><span class='bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs'>مكتمل</span></td></tr>`)"
+                        class="bg-white border border-slate-200 hover:border-black p-5 rounded-2xl shadow-sm cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-bold">MT5 Ultra Low</span>
+                            <h4 class="text-slate-900 font-bold text-base mt-2">Khaled Barakat</h4>
+                            <p class="text-slate-500 text-xs">#74926588</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-slate-400 block text-xs">الرصيد:</span>
+                            <strong class="text-slate-900 text-lg">$16,500.00</strong>
+                            <span class="text-emerald-600 font-bold text-xs block">+$6,435.00</span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
-            <!-- Error Box -->
-            <div id="error-box" class="hidden mt-4 bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-xl text-center"></div>
+            <!-- VIEW 2: Real XM Account Dashboard (Light Theme Simulation) -->
+            <div id="view-account" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900" id="xm-name">اسم المستثمر</h2>
+                        <p class="text-slate-500 text-xs">حساب تداول حقيقي مرخص</p>
+                    </div>
+                    <button onclick="showView('view-list')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs px-4 py-2 rounded-xl transition font-medium">← العودة للحسابات</button>
+                </div>
 
-            <!-- Result Box (Hidden by default) -->
-            <div id="result-box" class="hidden mt-6 bg-slate-950 border border-emerald-500/30 p-5 rounded-xl space-y-3 text-sm">
-                <div class="flex justify-between border-b border-slate-900 pb-2">
-                    <span class="text-slate-400">رقم الحساب:</span>
-                    <span id="res-acc" class="font-bold text-amber-400">---</span>
+                <!-- Main Account Card (XM Light Dashboard Style) -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-slate-900 text-white text-xs px-2.5 py-0.5 rounded font-bold">Real</span>
+                            <span class="text-slate-500 text-xs font-semibold" id="xm-accnum">#00000000</span>
+                        </div>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mt-1" id="xm-balance">$0.00</h3>
+                        <span class="text-emerald-600 font-bold text-sm block mt-1" id="xm-profit">+$0.00</span>
+                    </div>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <button class="flex-1 md:flex-none bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold px-6 py-2.5 rounded-xl transition">إدارة الحساب</button>
+                        <button class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-600 text-slate-950 text-sm font-bold px-6 py-2.5 rounded-xl transition">إيداع / سحب</button>
+                    </div>
                 </div>
-                <div class="flex justify-between border-b border-slate-900 pb-2">
-                    <span class="text-slate-400">حالة السيرفر:</span>
-                    <span id="res-status" class="font-bold text-emerald-400">---</span>
+
+                <!-- Account Details Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                        <span class="text-slate-400 text-xs block">الائتمان (Credit)</span>
+                        <strong class="text-slate-900 text-base" id="xm-credit">$0.00</strong>
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                        <span class="text-slate-400 text-xs block">الرافعة المالية</span>
+                        <strong class="text-slate-900 text-base" id="xm-leverage">1:500</strong>
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                        <span class="text-slate-400 text-xs block">حالة السيرفر</span>
+                        <strong class="text-emerald-600 text-base">متصل ومنتظم</strong>
+                    </div>
                 </div>
-                <div class="flex justify-between border-b border-slate-900 pb-2">
-                    <span class="text-slate-400">إجمالي الأرباح:</span>
-                    <span id="res-profit" class="font-bold text-emerald-400">---</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-400">آخر سحب (سبتمبر):</span>
-                    <span id="res-last-withdrawal" class="font-bold text-blue-400">---</span>
+
+                <!-- Transaction Ledger -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm mb-12">
+                    <div class="bg-slate-50 px-6 py-3 font-bold text-xs text-slate-700 border-b border-slate-200">سجل المعاملات المالية والسحوبات (شامل سبتمبر 2026)</div>
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400 text-xs">
+                                <th class="p-4">نوع العملية</th>
+                                <th class="p-4">المبلغ</th>
+                                <th class="p-4">التاريخ</th>
+                                <th class="p-4">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="xm-history-body" class="divide-y divide-slate-100 text-sm text-slate-700">
+                            <!-- Dynamic Data -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="text-center py-4 text-slate-500 text-xs border-t border-slate-900">
-        XM Verification Gateway © 2026 - نظام استعلام آمن وموثق.
-    </footer>
+        </main>
+    </div>
 
 </body>
 </html>
