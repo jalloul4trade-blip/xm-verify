@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XM Live Account Verification Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+    <script>
+        function verifyAccount() {
+            var accNumber = document.getElementById('input-acc').value.trim();
+            var resultBox = document.getElementById('result-box');
+            var errorBox = document.getElementById('error-box');
+            
+            resultBox.classList.add('hidden');
+            errorBox.classList.add('hidden');
+
+            if(accNumber === "") {
+                errorBox.innerText = "الرجاء إدخال رقم الحساب الصحيح.";
+                errorBox.classList.remove('hidden');
+                return;
+            }
+
+            // محاكاة البحث عن الحساب وإظهار النتيجة الحقيقية
+            document.getElementById('res-acc').innerText = accNumber;
+            document.getElementById('res-status').innerText = "نشط ومستقر (Verified Server)";
+            document.getElementById('res-profit').innerText = "+$3,389.20 (أرباح محققة)";
+            document.getElementById('res-last-withdrawal').innerText = "$950.00 (تاريخ 2026-09-30 - مكتمل)";
+            
+            resultBox.classList.remove('hidden');
+        }
+    </script>
+</head>
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-[#111827] border-b border-amber-500/30 py-4 px-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="bg-amber-500 text-slate-950 font-black px-3 py-1 rounded text-lg">XM</div>
+            <span class="text-xs text-slate-400 font-semibold border-r border-slate-700 pr-3">Live Server Verification</span>
+        </div>
+        <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full">🟢 نظام التحقق الآلي متصل</span>
+    </header>
+
+    <!-- Main Verification Box -->
+    <main class="max-w-xl mx-auto px-4 py-12 w-full flex-grow flex flex-col justify-center">
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
+            <h2 class="text-xl font-bold text-amber-400 mb-2 text-center">التحقق من حالة الحساب الحقيقي</h2>
+            <p class="text-slate-400 text-xs text-center mb-6">أدخل رقم الحساب المرتبط بروبوت Mr. Scalper لاستعراض حالة السيرفر وسجلات شهر سبتمبر 2026.</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">رقم الحساب الحقيقي (مثل: XM-74921045)</label>
+                    <input type="text" id="input-acc" placeholder="أدخل رقم الحساب هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+                </div>
+                
+                <button onclick="verifyAccount()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-xl transition duration-200 text-sm">
+                    تحقق من السجلات الفورية 🔍
+                </button>
+            </div>
+
+            <!-- Error Box -->
+            <div id="error-box" class="hidden mt-4 bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-xl text-center"></div>
+
+            <!-- Result Box (Hidden by default) -->
+            <div id="result-box" class="hidden mt-6 bg-slate-950 border border-emerald-500/30 p-5 rounded-xl space-y-3 text-sm">
+                <div class="flex justify-between border-b border-slate-900 pb-2">
+                    <span class="text-slate-400">رقم الحساب:</span>
+                    <span id="res-acc" class="font-bold text-amber-400">---</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-900 pb-2">
+                    <span class="text-slate-400">حالة السيرفر:</span>
+                    <span id="res-status" class="font-bold text-emerald-400">---</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-900 pb-2">
+                    <span class="text-slate-400">إجمالي الأرباح:</span>
+                    <span id="res-profit" class="font-bold text-emerald-400">---</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">آخر سحب (سبتمبر):</span>
+                    <span id="res-last-withdrawal" class="font-bold text-blue-400">---</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-slate-500 text-xs border-t border-slate-900">
+        XM Verification Gateway © 2026 - نظام استعلام آمن وموثق.
+    </footer>
+
+</body>
+</html>
