@@ -31,10 +31,12 @@
 </head>
 <body class="bg-[#f8f9fa] text-slate-900 min-h-screen flex">
 
-    <!-- Left Sidebar Icons (XM Style) -->
+    <!-- Left Sidebar Icons (XM Style with Exact Logo) -->
     <aside class="w-16 bg-white border-r border-slate-200 hidden md:flex flex-col items-center py-6 space-y-6 sticky top-0 h-screen">
-        <!-- XM Logo -->
-        <div class="bg-black text-white font-black px-2.5 py-1 rounded text-sm tracking-wider">XM</div>
+        <!-- Exact XM Official Logo Simulation -->
+        <div class="bg-black text-white font-extrabold px-2 py-1.5 rounded-md text-xs tracking-tighter flex items-center shadow-sm">
+            <span>X</span><span class="text-[#ff9800]">M</span>
+        </div>
         <div class="space-y-5 text-slate-400">
             <button onclick="showView('view-list')" class="p-2 hover:bg-slate-100 rounded-xl transition text-slate-800" title="Dashboard">🏠</button>
             <div class="p-2 hover:bg-slate-100 rounded-xl transition cursor-pointer" title="Deposit">💳</div>
@@ -50,6 +52,9 @@
         <!-- Top Navigation Bar -->
         <header class="bg-white border-b border-slate-200 py-3 px-6 flex justify-between items-center sticky top-0 z-40">
             <div class="flex items-center gap-3">
+                <div class="md:hidden bg-black text-white font-extrabold px-2 py-1 rounded text-xs">
+                    <span>X</span><span class="text-[#ff9800]">M</span>
+                </div>
                 <span class="font-bold text-slate-900 text-base">Member Area</span>
             </div>
             <div class="flex items-center gap-4">
